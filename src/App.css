@@ -1,5 +1,5 @@
 body {
-  background-color: #e6e6e6;
+  background-color: #123;
   color: #fff;
 }
 
@@ -7,7 +7,7 @@ div.board {
   max-width: 300px;
   display: grid;
   border: 2px solid black;
-
+  margin: auto;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr;
 }
