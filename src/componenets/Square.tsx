@@ -9,7 +9,7 @@ const Square: React.FC<SquareProps> = ({ onClick, x, o }) => {
 
     return (
         <>
-            <div className="square" onClick={onClick}>
+            <div className={'square square-' + value} onClick={onClick}>
                 {value}
             </div>
         </>

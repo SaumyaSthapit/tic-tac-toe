@@ -50,12 +50,18 @@ function App() {
         }
 
         const putComputerAt = (index: any) => {
+            if (winner) return;
+
             let newSquares = [...squares];
             newSquares[index] = "O";
             setSquares(newSquares);
         };
-
+        
         if (isComputerTurn) {
+            // Check if game has finished
+            const emptySquares = squares.filter(square => square == null)
+            if (emptySquares.length === 0) return
+
             const winningLines = linesThatAre("O", "O", null);
 
             if (winningLines.length > 0) {
@@ -91,12 +97,16 @@ function App() {
                 .filter((val) => val !== null);
 
             const randomIndex =
-                emptySpaces[Math.ceil(Math.random() * emptySpaces.length)];
+                emptySpaces[Math.floor(Math.random() * emptySpaces.length)];
+
             putComputerAt(randomIndex);
+            return;
         }
     }, [squares]);
 
     function handleSquareClick(index: number) {
+        if (winner) return;
+
         const isPlayerTurn =
             squares.filter((square) => square !== null).length % 2 === 0;
 
@@ -105,6 +115,10 @@ function App() {
             newSquares[index] = "X";
             setSquares(newSquares);
         }
+    }
+
+    function handleReset() {
+        setSquares(defaultSquares);
     }
 
     return (
@@ -120,7 +134,17 @@ function App() {
                         />
                     ))}
                 </Board>
-                {winner && <div style={{"textAlign": "center"}}>{winner} won the game.</div>}
+                {winner && (
+                    <div style={{ textAlign: "center" }}>
+                        {winner} won the game.
+                        <button
+                            style={{ marginLeft: "10px" }}
+                            onClick={handleReset}
+                        >
+                            Reset
+                        </button>
+                    </div>
+                )}
             </main>
         </>
     );

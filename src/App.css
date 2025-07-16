@@ -1,6 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=TikTok+Sans:opsz,wght@12..36,300..900&display=swap');
+
 body {
-  background-color: #123;
+  margin: 0;
+  display: flex;
+  place-items: center;
+  justify-content: center;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: #252525;
   color: #fff;
+  text-align: center;
+  font-family: "Nunito Sans", sans-serif;
 }
 
 div.board {
@@ -15,9 +25,18 @@ div.board {
 div.square {
   width: 100px;
   height: 100px;
-  border: 2px solid #fff;
+  border: 2px solid #f7ffc4;
   box-sizing: border-box;
   font-size: 4rem;
   text-align: center;
   cursor: pointer;
+  padding-top: 8px;
+}
+
+.square-X {
+  color: #ffff00;
+}
+
+.square-O {
+  color: #00ffff;
 }
