@@ -19,15 +19,27 @@ const lines = [
 function App() {
     const [squares, setSquares] = useState(defaultSquares());
     const [winner, setWinner] = useState("");
+    const [winningSquares, setWinningSquares] = useState(
+        new Array(3).fill(null),
+    );
+    const [winningLineClass, setWinningLineClass] = useState("");
+    const [gameOver, setGameOver] = useState(false);
 
     useEffect(() => {
+        const isGameOver =
+            squares.filter((square) => square === null).length < 1;
+
+        if (isGameOver) {
+            setGameOver(true)
+        }
+
         const isComputerTurn =
             squares.filter((square) => square !== null).length % 2 === 1;
 
-        const linesThatAre = (a: any, b: any, c: any): number[][] => {
+        const linesThatAre = (a: any, b: any, c: any): Array<any> => {
             return lines.filter((squareIndexes) => {
                 const squareValues = squareIndexes.map(
-                    (index) => squares[index]
+                    (index) => squares[index],
                 );
                 return (
                     JSON.stringify([a, b, c].sort()) ===
@@ -36,16 +48,35 @@ function App() {
             });
         };
 
-        const playerWon = linesThatAre("X", "X", "X").length > 0;
-        const computerWon = linesThatAre("O", "O", "O").length > 0;
+        const playerWon = linesThatAre("X", "X", "X");
+        const computerWon = linesThatAre("O", "O", "O");
 
-        if (playerWon) {
-            setWinner("X");
+        const declareWinner = (winner: string, winningSquares: Array<any>) => {
+            setWinner(winner);
+            setWinningSquares(winningSquares[0]);
+
+            const lineIndex = lines.indexOf(winningSquares[0]);
+
+            if (lineIndex === 6) {
+                setWinningLineClass("top-to-bottom");
+            } else if (lineIndex === 7) {
+                setWinningLineClass("bottom-to-top");
+            } else if (lineIndex < 3) {
+                setWinningLineClass("horizontal");
+            } else {
+                setWinningLineClass("vertical");
+            }
+
+            setGameOver(true)
+        };
+
+        if (playerWon.length > 0) {
+            declareWinner("X", playerWon);
             return;
         }
 
-        if (computerWon) {
-            setWinner("O");
+        if (computerWon.length > 0) {
+            declareWinner("O", computerWon);
             return;
         }
 
@@ -56,17 +87,17 @@ function App() {
             newSquares[index] = "O";
             setSquares(newSquares);
         };
-        
+
         if (isComputerTurn) {
             // Check if game has finished
-            const emptySquares = squares.filter(square => square == null)
-            if (emptySquares.length === 0) return
+            const emptySquares = squares.filter((square) => square == null);
+            if (emptySquares.length === 0) return;
 
             const winningLines = linesThatAre("O", "O", null);
 
             if (winningLines.length > 0) {
                 const winIndex = winningLines[0].filter(
-                    (index) => squares[index] === null
+                    (index: string | number) => squares[index] === null,
                 )[0];
                 putComputerAt(winIndex);
                 return;
@@ -76,7 +107,7 @@ function App() {
 
             if (linesToBlock.length > 0) {
                 const blockIndex = linesToBlock[0].filter(
-                    (index) => squares[index] === null
+                    (index: string | number) => squares[index] === null,
                 )[0];
                 putComputerAt(blockIndex);
                 return;
@@ -86,7 +117,7 @@ function App() {
 
             if (linesToContinue.length > 0) {
                 const continueIndex = linesToContinue[0].filter(
-                    (index) => squares[index] === null
+                    (index: string | number) => squares[index] === null,
                 )[0];
                 putComputerAt(continueIndex);
                 return;
@@ -111,6 +142,9 @@ function App() {
             squares.filter((square) => square !== null).length % 2 === 0;
 
         if (isPlayerTurn) {
+            // Check if the square has already been clicked
+            if (squares[index] !== null) return;
+
             let newSquares = [...squares];
             newSquares[index] = "X";
             setSquares(newSquares);
@@ -118,7 +152,10 @@ function App() {
     }
 
     function handleReset() {
+        setGameOver(false)
         setSquares(defaultSquares);
+        setWinner("");
+        setWinningLineClass("");
     }
 
     return (
@@ -129,19 +166,23 @@ function App() {
                         <Square
                             x={square === "X" ? 1 : 0}
                             o={square === "O" ? 1 : 0}
+                            squareIndex={squareIndex}
+                            winningSquares={winningSquares}
+                            winningLineClass={winningLineClass}
                             onClick={() => handleSquareClick(squareIndex)}
                             key={squareIndex}
                         />
                     ))}
                 </Board>
-                {winner && (
-                    <div style={{ textAlign: "center" }}>
-                        {winner} won the game.
+                {gameOver && (
+                    <div style={{ textAlign: "center", paddingTop: "1.5rem" }}>
+                        {/* {winner && (<h4>{winner} won the game.</h4>)} */}
                         <button
+                            className="next-btn"
                             style={{ marginLeft: "10px" }}
                             onClick={handleReset}
                         >
-                            Reset
+                            NEXT GAME
                         </button>
                     </div>
                 )}
