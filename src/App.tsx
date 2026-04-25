@@ -97,7 +97,7 @@ function App() {
 
             if (winningLines.length > 0) {
                 const winIndex = winningLines[0].filter(
-                    (index: string | number) => squares[index] === null,
+                    (index: number) => squares[index] === null,
                 )[0];
                 putComputerAt(winIndex);
                 return;
@@ -107,7 +107,7 @@ function App() {
 
             if (linesToBlock.length > 0) {
                 const blockIndex = linesToBlock[0].filter(
-                    (index: string | number) => squares[index] === null,
+                    (index: number) => squares[index] === null,
                 )[0];
                 putComputerAt(blockIndex);
                 return;
@@ -117,7 +117,7 @@ function App() {
 
             if (linesToContinue.length > 0) {
                 const continueIndex = linesToContinue[0].filter(
-                    (index: string | number) => squares[index] === null,
+                    (index: number) => squares[index] === null,
                 )[0];
                 putComputerAt(continueIndex);
                 return;
